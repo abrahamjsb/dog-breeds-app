@@ -3,12 +3,20 @@ import {  createSlice, PayloadAction } from '@reduxjs/toolkit';
 interface BreedState {
     breedSelected: string;
     subBreedSelected: string;
+    favorites: string[];
 }
 
-const initialState: BreedState = {
-    breedSelected: "",
-    subBreedSelected: "",
+function getInitialState():BreedState {
+    const favoritesRaw: string | null = window.localStorage.getItem("favorites");
+    const favorites: string[] = favoritesRaw ? JSON.parse(favoritesRaw) : [];
+    return  {
+        breedSelected: "",
+        subBreedSelected: "",
+        favorites
+    }
 }
+
+const initialState = getInitialState();
 
 export const breedSlice = createSlice({
     name: 'breed',

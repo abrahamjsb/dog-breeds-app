@@ -20,7 +20,7 @@ export default function SubBreedFilter({
       <Col xs={24}>
         <h5 className="filter-title">Filter by sub-breed:</h5>
       </Col>
-      <Col xs={16}>
+      <Col xs={24} md={16}>
         <div className="filter-keywords-container">
           <Button
             onClick={() => dispatch(setSubBreed(""))}

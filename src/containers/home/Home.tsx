@@ -11,47 +11,37 @@ import {
   Row,
   Modal,
   Button,
-  IconButton,
 } from "rsuite";
 import "./Home.css";
-import {
-  MdSearch,
-  MdClose,
-  MdFavoriteBorder,
-  MdFavorite,
-} from "react-icons/md";
+import { MdSearch, MdClose } from "react-icons/md";
 import { useFetchBreedsQuery } from "../../services/api";
 import Spinner from "../../components/spinner/Spinner";
 import { useAppSelector, useAppDispatch } from "../../app/hooks";
 import { setBreed, setSubBreed } from "../../features/breeds/breedSlice";
-
-const validateBreed = (breed: string, breedList: string[]): boolean =>
-  breedList.includes(breed);
+import FavoriteButton from "../../components/favorite-button/FavoriteButton";
+import SubBreedFilter from "../../components/sub-breed-filter/SubBreedFilter";
+import DogImage from "../../components/dog-image/DogImage";
+import {
+  useFetchBreedImagesQuery,
+  useFetchSubBreedImagesQuery,
+} from "../../services/api";
+import { validateBreed } from "../../utils/utils";
 
 export default function Home() {
-  const { data, error, isLoading } = useFetchBreedsQuery("");
+  const { data, isLoading } = useFetchBreedsQuery("");
   const { breedSelected, subBreedSelected } = useAppSelector(
     (store) => store.breed
   );
   const [visible, setVisible] = useState<boolean>(false);
   const [value, setValue] = useState<string>("");
-  const [showClear, setShowClear] = useState<boolean>(false);
-  const [fav, setFav] = useState<boolean>(false);
   const breeds = data ? Object.keys(data.message) : [];
-  const subBreedList = breedSelected ? data.message[breedSelected] : [];
+  const subBreedList = breedSelected && data ? data.message[breedSelected] : [];
   const dispatch = useAppDispatch();
   useEffect(() => {
-    console.log("breedState", subBreedList);
     const isValidBreed = validateBreed(value, breeds);
     if (isValidBreed) {
       dispatch(setBreed(value));
-    } else {
-      dispatch(setBreed(""));
-    }
-    if (value) {
-      setShowClear(true);
-    } else {
-      setShowClear(false);
+      dispatch(setSubBreed(""));
     }
   }, [value]);
   return (
@@ -88,7 +78,7 @@ export default function Home() {
                           value={value}
                           onChange={(val) => setValue(val)}
                         />
-                        {showClear && (
+                        {value && (
                           <MdClose
                             className="clear-btn"
                             size={24}
@@ -119,61 +109,32 @@ export default function Home() {
           <Grid>
             <Row className="show-grid">
               <Row>
-                <Col xs={24}>
-                  <h5 className="filter-title">Filter by sub-breed:</h5>
-                </Col>
-                <Col xs={16}>
-                  <div className="filter-keywords-container">
-                    <Button
-                      appearance="primary"
-                      classPrefix={
-                        !subBreedSelected ? "keyword selected" : "keyword"
-                      }
-                    >
-                      All
-                    </Button>
-                    {subBreedList.map((subBreed: string) => (
-                      <Button
-                        onClick={() => dispatch(setSubBreed(subBreed))}
-                        appearance="primary"
-                        classPrefix={
-                          subBreed === subBreedSelected
-                            ? "keyword selected"
-                            : "keyword"
-                        }
-                      >
-                        {subBreed}
-                      </Button>
-                    ))}
-                  </div>
-                </Col>
-                <Col xs={8}>
+                <SubBreedFilter
+                  subBreedList={subBreedList}
+                  subBreedSelected={subBreedSelected}
+                  breedSelected={breedSelected}
+                />
+                <Col xs={breedSelected && subBreedList.length > 0 ? 8 : 24}>
                   <FlexboxGrid justify="end">
-                    <IconButton
-                      classPrefix="fav-btn"
-                      appearance="link"
-                      icon={
-                        !fav ? (
-                          <MdFavoriteBorder color="#535353" size={27} />
-                        ) : (
-                          <MdFavorite color="#db0d36" size={27} />
-                        )
-                      }
-                      onClick={!fav ? () => setFav(true) : () => setFav(false)}
-                    >
-                      {!fav
-                        ? "Add breed to favorites"
-                        : "Remove from favorites"}
-                    </IconButton>
+                    <FavoriteButton />
                   </FlexboxGrid>
                 </Col>
               </Row>
               <Row>
-                <Col xs={24} md={8}>
-                  <div className="thumbnail-container">
-                    <img src="https://images.dog.ceo/breeds/labradoodle/labradoodle-forrest.png" />
-                  </div>
-                </Col>
+                {breedSelected && (
+                  <DogImage
+                    breed={
+                      subBreedSelected
+                        ? { breed: breedSelected, subBreed: subBreedSelected }
+                        : breedSelected
+                    }
+                    hook={
+                      subBreedSelected
+                        ? useFetchSubBreedImagesQuery
+                        : useFetchBreedImagesQuery
+                    }
+                  />
+                )}
               </Row>
             </Row>
           </Grid>

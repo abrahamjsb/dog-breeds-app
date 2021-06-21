@@ -1,10 +1,15 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
-import counterReducer from '../features/counter/counterSlice';
+import { setupListeners } from '@reduxjs/toolkit/query'
+import { breedsDogApi } from '../services/api';
+import breedSlice from '../features/breeds/breedSlice';
 
 export const store = configureStore({
   reducer: {
-    counter: counterReducer,
+    [breedsDogApi.reducerPath]: breedsDogApi.reducer,
+    breed: breedSlice
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(breedsDogApi.middleware),
 });
 
 export type AppDispatch = typeof store.dispatch;
@@ -15,3 +20,5 @@ export type AppThunk<ReturnType = void> = ThunkAction<
   unknown,
   Action<string>
 >;
+
+setupListeners(store.dispatch)

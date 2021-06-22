@@ -10,4 +10,4 @@ To run development environment, in the project directory, you can run:
 
 You can also visit the final result in the next link:
 
-[I'm an inline-style link](https://www.google.com)
+[Dog app site](https://zen-ramanujan-b88bcf.netlify.app/)

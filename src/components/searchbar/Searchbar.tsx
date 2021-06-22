@@ -29,6 +29,7 @@ export default function Searchbar({
       dispatch(setBreed(value));
       dispatch(setSubBreed(""));
     }
+    // eslint-disable-next-line
   }, [value]);
   return (
     <>

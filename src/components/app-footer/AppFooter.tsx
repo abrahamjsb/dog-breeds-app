@@ -13,7 +13,7 @@ export default function AppFooter() {
               <p className="footer-text">
                 This site its only for a use of a practical test. All rights to
                 the owners of images used here and{" "}
-                <a target="_blank" href="https://dog.ceo/">
+                <a rel="noreferrer" target="_blank" href="https://dog.ceo/">
                   Dog CEO API
                 </a>
               </p>

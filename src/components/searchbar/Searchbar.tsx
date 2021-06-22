@@ -6,14 +6,21 @@ import { MdSearch, MdClose } from "react-icons/md";
 import ModalBreedList from "../breed-list-modal/ModalBreedList";
 import { validateBreed } from "../../utils/utils";
 import { setBreed, setSubBreed } from "../../features/breeds/breedSlice";
+import { isMobile } from "../../utils/utils";
 
 interface SearchbarProps {
   isLoading: boolean;
   breeds: string[];
+  setShow: (value: boolean) => void;
 }
-export default function Searchbar({ isLoading, breeds }: SearchbarProps) {
+export default function Searchbar({
+  isLoading,
+  breeds,
+  setShow,
+}: SearchbarProps) {
   const [visible, setVisible] = useState<boolean>(false);
   const [value, setValue] = useState<string>("");
+  const mobile = isMobile(window.innerWidth);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -25,7 +32,7 @@ export default function Searchbar({ isLoading, breeds }: SearchbarProps) {
   }, [value]);
   return (
     <>
-      <FlexboxGrid align="middle">
+      <FlexboxGrid justify="center" align="middle">
         {isLoading ? (
           <Spinner />
         ) : (
@@ -49,7 +56,7 @@ export default function Searchbar({ isLoading, breeds }: SearchbarProps) {
                 />
               )}
             </div>
-            <div>
+            <FlexboxGrid>
               <Button
                 classPrefix="show-list"
                 appearance="link"
@@ -59,7 +66,18 @@ export default function Searchbar({ isLoading, breeds }: SearchbarProps) {
               >
                 Show list
               </Button>
-            </div>
+              {mobile && (
+                <Button
+                  classPrefix="show-list"
+                  appearance="link"
+                  onClick={() => {
+                    setShow(true);
+                  }}
+                >
+                  Show favorites
+                </Button>
+              )}
+            </FlexboxGrid>
           </>
         )}
       </FlexboxGrid>

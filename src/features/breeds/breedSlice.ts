@@ -28,9 +28,12 @@ export const breedSlice = createSlice({
         setSubBreed : (state, action: PayloadAction<string>) => {
             state.subBreedSelected = action.payload;
         },
+        setFavorite : (state, action: PayloadAction<string[]>) => {
+            state.favorites = action.payload;
+        },
     },
   })
 
-export const { setBreed, setSubBreed } = breedSlice.actions;
+export const { setBreed, setSubBreed, setFavorite } = breedSlice.actions;
 
 export default breedSlice.reducer

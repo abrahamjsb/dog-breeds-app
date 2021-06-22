@@ -1,0 +1,14 @@
+.fav-title {
+  padding-left: 10px;
+}
+
+.fav-list-item .fav-list-item-content {
+  padding-left: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.fav-list-item svg {
+  cursor: pointer;
+}

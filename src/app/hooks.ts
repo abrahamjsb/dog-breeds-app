@@ -35,7 +35,7 @@ export function useBreeds() {
       dispatch(setBreed(defaultBreed));
     }
     // eslint-disable-next-line
-  }, []);
+  }, [isLoading]);
   return {
     isLoading,
     breedSelected,

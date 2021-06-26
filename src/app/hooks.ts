@@ -3,7 +3,7 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import type { RootState, AppDispatch } from "./store";
 import { useFetchBreedsQuery } from "../services/api";
 import { getDefaultBreed } from "../utils/utils";
-import { setBreed } from "../features/breeds/breedSlice";
+import { setBreed, setSubBreed } from "../features/breeds/breedSlice";
 
 export const useAppDispatch = () => useDispatch<AppDispatch>();
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
@@ -33,6 +33,7 @@ export function useBreeds() {
   useEffect(() => {
     if (!breedSelected) {
       dispatch(setBreed(defaultBreed));
+      dispatch(setSubBreed(""));
     }
     // eslint-disable-next-line
   }, [isLoading]);
